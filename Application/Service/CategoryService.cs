@@ -1,34 +1,31 @@
 using System.Net;
 using System.Reflection.Metadata.Ecma335;
+using Application.DTOs.Category;
 using Application.Interfaces;
 using Application.Responses;
 using Domain.Models;
 using Infrastructure.Data;
+using Infrastructure.Repository;
 
 namespace Application.Service;
 
 public class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
 {
     private ICategoryRepository repository = categoryRepository;
-    public async Task<ApiResponse<bool>> AddCategory(Category category)
+    public async Task<ApiResponse<bool>> AddCategory(CategoryCreateDto category)
     {
-        if(category == null)
+        var categ = new Category()
         {
-            return new ApiResponse<bool>(HttpStatusCode.BadRequest, "Category can not null !!");
-        }
-        var conn = await repository.AddCategory(category);
-        return conn == true
-        ? new ApiResponse<bool>(HttpStatusCode.OK, "Added !", conn)
-        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Added !", conn);
+            Name = category.Name
+        };
+        var res = await repository.AddCategory(categ);
+        return res == true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Category added !")
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Category not added !");
     }
 
     public async Task<ApiResponse<bool>> DeleteCategory(int id)
     {
-        if(id <= 0 || id == null)
-        {
-            return new ApiResponse<bool>(HttpStatusCode.BadRequest, "ID is invalid !!");
-        }
-
         var conn = await repository.DeleteCategory(id);
 
         return conn == true 
@@ -36,29 +33,35 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Deleted !", conn);
     }
 
-    public async Task<ApiResponse<List<Category>>> GetCategories()
+    public async Task<ApiResponse<List<CategoryResponseDto>>> GetCategories()
     {
-        var conn = await repository.GetCategories();
-        return new ApiResponse<List<Category>>(HttpStatusCode.OK, "List of Categories");
+        var cate = await repository.GetCategories();
+        var category = cate.Select(s => new CategoryResponseDto
+        {
+            Name = s.Name
+        }).ToList();
+        return new ApiResponse<List<CategoryResponseDto>>(HttpStatusCode.OK, "List of Category", category);
     }
 
-    public async Task<ApiResponse<Category>> GetCategory(int id)
+    public async Task<ApiResponse<CategoryResponseDto>> GetCategory(int id)
     {
         var conn = await repository.GetCategory(id);
-        if(conn == null)
+        var category = new CategoryResponseDto
         {
-            return new ApiResponse<Category>(HttpStatusCode.NotFound, "Category not found!", null!);
-        }
-
-        return new ApiResponse<Category>(HttpStatusCode.OK, "Category id. ", conn);
+            Name = conn.Name
+        };
+        return new ApiResponse<CategoryResponseDto>(HttpStatusCode.OK, "Category by id. ", category);
     }
 
-    public async Task<ApiResponse<bool>> UpdateCategory(Category category)
+    public async Task<ApiResponse<bool>> UpdateCategory(int id, CategoryUpdateDto category)
     {
-        var conn = await repository.UpdateCategory(category);
-        return conn == true
-        ? new ApiResponse<bool>(HttpStatusCode.OK, "Updated !", conn)
-        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Updated!", conn);
+        var cate = new Category()
+        {
+            Name = category.Name
+        };
+        var res = await repository.UpdateCategory(cate);
+        return res == true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Category update !")
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Category not update !");
     }
-
 }
