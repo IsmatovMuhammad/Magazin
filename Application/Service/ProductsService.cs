@@ -52,6 +52,7 @@ public class ProductsService(IProductsRepository productsRepository) : IProductS
         var con = await repository.GetProductByCategory(name);
         var pr = con.Select(s => new ProductResponseDto
         {
+            Id = s.Id,
             Name = s.Name,
             Price = s.Price,
             CategoryId = s.CategoryId
@@ -64,6 +65,7 @@ public class ProductsService(IProductsRepository productsRepository) : IProductS
         var conn = await repository.GetProducts();
         var product = conn.Select(s => new ProductResponseDto
         {
+            Id = s.Id,
             Name = s.Name,
             Price = s.Price,
             CategoryId = s.CategoryId
@@ -82,7 +84,7 @@ public class ProductsService(IProductsRepository productsRepository) : IProductS
         };
         var conn = await repository.UpdateProductAsync(pr);
         return conn == true
-        ? new ApiResponse<bool>(HttpStatusCode.OK, "Product updated !")
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Product updated !", conn)
         : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Product not update !");
     }
 }

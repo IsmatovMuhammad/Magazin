@@ -38,6 +38,7 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         var cate = await repository.GetCategories();
         var category = cate.Select(s => new CategoryResponseDto
         {
+            Id = s.Id,
             Name = s.Name
         }).ToList();
         return new ApiResponse<List<CategoryResponseDto>>(HttpStatusCode.OK, "List of Category", category);
@@ -48,6 +49,7 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         var conn = await repository.GetCategory(id);
         var category = new CategoryResponseDto
         {
+            Id = id,
             Name = conn.Name
         };
         return new ApiResponse<CategoryResponseDto>(HttpStatusCode.OK, "Category by id. ", category);
