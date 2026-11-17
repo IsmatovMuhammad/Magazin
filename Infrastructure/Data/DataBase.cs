@@ -1,11 +1,14 @@
 using System.Data;
+using System.Net.Security;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using Npgsql;
 
 namespace Infrastructure.Data;
 
-public class DataBase
+public class DataBase(DbContextOptions<DataBase>options):DbContext(options)
 {
-    private string connectionString = "Host=localhost;Port=5432;DataBase=Magazin;Username=postgres;Password=1234";
-    public NpgsqlConnection Connection() => new NpgsqlConnection(connectionString);
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
 }

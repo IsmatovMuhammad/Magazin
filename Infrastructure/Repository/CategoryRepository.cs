@@ -2,55 +2,51 @@ using System.Xml.Serialization;
 using Dapper;
 using Domain.Models;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace Infrastructure.Repository;
 
-public class CategoryRepository(DataBase data) : ICategoryRepository
+public class CategoryRepository(DataBase dataBase) : ICategoryRepository
 {
-    private DataBase dataBase = data;
+    private DataBase data = dataBase;
     public async Task<bool> AddCategory(Category category)
     {
-        using var conn = dataBase.Connection();
-        conn.Open();
-        var query = "insert into categories(name)values(@name)";
-        var res = await conn.ExecuteAsync(query, category);
+        data.Categories.Add(category);
+        var res = await data.SaveChangesAsync();
         return res > 0;
     }
 
     public async Task<bool> DeleteCategory(int id)
     {
-        using var conn = dataBase.Connection();
-        conn.Open();
-        var query = "delete from categories where id = @id";
-        var res = await conn.ExecuteAsync(query, new{id});
+        var del = await data.Categories.FirstOrDefaultAsync(x => x.Id == id);
+        if(del != null)
+        {
+            data.Categories.Remove(del);
+        }
+        var res = await data.SaveChangesAsync();
         return res > 0;
     }
 
     public async Task<List<Category>> GetCategories()
     {
-        using var conn = dataBase.Connection();
-        conn.Open();
-        var query = "select * from categories";
-        var res = await conn.QueryAsync<Category>(query);
-        return res.ToList();
+        return await data.Categories.ToListAsync();
     }
 
     public async Task<Category> GetCategory(int id)
     {
-        using var conn = dataBase.Connection();
-        conn.Open();
-        var query = "Select * from categories where id = @id";
-        var res = await conn.QuerySingleOrDefaultAsync<Category>(query, new{id});
-        return res!;
+        var res = await data.Categories.FirstOrDefaultAsync(x => x.Id == id);
+        return res??new();
     }
 
     public async Task<bool> UpdateCategory(Category category)
     {
-        using var conn = dataBase.Connection();
-        conn.Open();
-        var query = "update categories set name = @name where id = @id";
-        var res = await conn.ExecuteAsync(query, category);
+        var upd = await data.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
+        if(upd != null)
+        {
+            upd.Name = category.Name;
+        }
+        var res = await data.SaveChangesAsync();
         return res > 0;
     }
 

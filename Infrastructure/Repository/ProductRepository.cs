@@ -1,69 +1,64 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using Dapper;
 using Domain.Interfaces;
 using Domain.Models;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace Infrastructure.Repository;
 
 public class ProductRepository(DataBase dataBase) : IProductsRepository
 {
-    private DataBase data1 = dataBase;
+    private DataBase data = dataBase;
     public async Task<bool> AddProductAsync(Product product)
     {
-        using var conn = data1.Connection();
-        conn.Open();
-        var query = "insert into products(name, price, categoryid)values(@name, @price, @categoryid)";
-        var res = await conn.ExecuteAsync(query, product);
+        data.Products.Add(product);
+        var res = await data.SaveChangesAsync();
         return res > 0;
     }
 
 
     public async Task<bool> DeleteProductAsync(int id)
     {
-        using var conn = data1.Connection();
-        conn.Open();
-        var query = "delete from products where id = @id";
-        var res = await conn.ExecuteAsync(query, new{id});
+        var del = await data.Products.FirstOrDefaultAsync(x => x.Id == id);
+        if(del != null)
+        {
+            data.Products.Remove(del);
+        }
+        var res = await data.SaveChangesAsync();
         return res > 0;
     }
 
     public async Task<Product> GetProductAsync(int id)
     {
-        using var conn = data1.Connection();
-        conn.Open();
-        var query = "Select * from products where id = @id";
-        var res = await conn.QuerySingleOrDefaultAsync<Product>(query, new{id});
-        return res!;
+        var res = await data.Products.FirstOrDefaultAsync(x => x.Id == id);
+        return res??new();
     }
 
     public async Task<List<Product>> GetProductByCategory(string name)
     {
-        using var conn = data1.Connection();
-        conn.Open();
-        var query = "Select p.* from products p join categories c on c.id = p.categoryid where c.name = @name";
-        var res = await conn.QueryAsync<Product>(query, new{name});
-        return res.ToList();
+        return await data.Products.Where(x=>x.Name==name).ToListAsync();
     }
 
     public async Task<List<Product>> GetProducts()
     {
-        using var conn = data1.Connection();
-        conn.Open();
-        var query = "select * from products";
-        var res = await conn.QueryAsync<Product>(query);
-        return res.ToList();
+        return await data.Products.ToListAsync();
     }
 
     public async Task<bool> UpdateProductAsync(Product product)
     {
-        using var conn = data1.Connection();
-        conn.Open();
-        var query = "update products set name = @name, price = @price where id = @id";
-        var res = await conn.ExecuteAsync(query, product);
-        return res>0;
+        var upd = await data.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
+        if(upd != null)
+        {
+            upd.Name = product.Name;
+            upd.Price = product.Price;
+            upd.CategoryId = product.CategoryId;
+        }
+        var res = await data.SaveChangesAsync();
+        return res > 0;
     }
 
 }
