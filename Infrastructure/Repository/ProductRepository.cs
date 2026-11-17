@@ -60,5 +60,4 @@ public class ProductRepository(DataBase dataBase) : IProductsRepository
         var res = await data.SaveChangesAsync();
         return res > 0;
     }
-
 }

@@ -20,8 +20,8 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         };
         var res = await repository.AddCategory(categ);
         return res == true
-        ? new ApiResponse<bool>(HttpStatusCode.OK, "Category added !")
-        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Category not added !");
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Category added !", true)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Category not added !", false);
     }
 
     public async Task<ApiResponse<bool>> DeleteCategory(int id)
@@ -29,8 +29,8 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         var conn = await repository.DeleteCategory(id);
 
         return conn == true 
-        ? new ApiResponse<bool>(HttpStatusCode.OK, "Deleted !", conn)
-        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Deleted !", conn);
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Deleted !", true)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Deleted !", false);
     }
 
     public async Task<ApiResponse<List<CategoryResponseDto>>> GetCategories()
@@ -59,6 +59,7 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
     {
         var cate = new Category()
         {
+            Id = id,
             Name = category.Name
         };
         var res = await repository.UpdateCategory(cate);
