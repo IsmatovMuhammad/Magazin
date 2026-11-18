@@ -21,3 +21,12 @@ C:\Users\Мухаммад\Desktop\Week3\day5\Class\MyApp\obj\Debug\net10.0\refin
 C:\Users\Мухаммад\Desktop\Week3\day5\Class\MyApp\obj\Debug\net10.0\MyApp.pdb
 C:\Users\Мухаммад\Desktop\Week3\day5\Class\MyApp\obj\Debug\net10.0\MyApp.genruntimeconfig.cache
 C:\Users\Мухаммад\Desktop\Week3\day5\Class\MyApp\obj\Debug\net10.0\ref\MyApp.dll
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.csproj.AssemblyReference.cache
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.AssemblyInfoInputs.cache
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.AssemblyInfo.cs
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.csproj.CoreCompileInputs.cache
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.sourcelink.json
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.dll
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\refint\MyApp.dll
+C:\Users\Мухаммад\Desktop\Magazin\MyApp\obj\Debug\net10.0\MyApp.pdb

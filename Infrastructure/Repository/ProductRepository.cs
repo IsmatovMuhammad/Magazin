@@ -40,7 +40,7 @@ public class ProductRepository(DataBase dataBase) : IProductsRepository
 
     public async Task<List<Product>> GetProductByCategory(string name)
     {
-        return await data.Products.Where(x=>x.Name==name).ToListAsync();
+        return await data.Products.Include(x => x.Category).Where(x=>x.Category!.Name==name).ToListAsync();
     }
 
     public async Task<List<Product>> GetProducts()
