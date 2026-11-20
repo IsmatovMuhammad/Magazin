@@ -13,4 +13,10 @@ public interface IProductService
     Task<ApiResponse<ProductResponseDto>> GetProductAsync(int id);
     Task<ApiResponse<List<ProductResponseDto>>> GetProducts();
     Task<ApiResponse<List<ProductResponseDto>>> GetProductByCategory(string name);
+    Task<ApiResponse<decimal>> GetAmountOfProducts();
+    Task<ApiResponse<bool>> GetAmountOfPtoductsByCategory(string name);
+    Task<ApiResponse<bool>> GetMinPriceOfProductByCategory(string name);
+    Task<ApiResponse<bool>> GetMaxPriceOfProductByCategory(string name);
+    Task<ApiResponse<bool>> GetAveragePriceOfProductbyCategory(string name);
+    Task<ApiResponse<decimal>> GetTotalPriceOfProducts();
 }

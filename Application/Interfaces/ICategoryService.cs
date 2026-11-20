@@ -12,4 +12,5 @@ public interface ICategoryService
     Task<ApiResponse<bool>> UpdateCategory(int id, CategoryUpdateDto category);
     Task<ApiResponse<CategoryResponseDto>> GetCategory(int id);
     Task<ApiResponse<List<CategoryResponseDto>>> GetCategories();
+    Task<ApiResponse<int>> GetAmountOfCategories();
 }

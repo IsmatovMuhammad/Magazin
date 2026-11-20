@@ -28,6 +28,12 @@ public class CategoryRepository(DataBase dataBase) : ICategoryRepository
         return res > 0;
     }
 
+    public async Task<int> GetAmountOfCategories()
+    {
+        return await data.Categories.CountAsync();
+    }
+
+
     public async Task<List<Category>> GetCategories()
     {
         return await data.Categories.ToListAsync();

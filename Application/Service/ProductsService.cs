@@ -34,6 +34,45 @@ public class ProductsService(IProductsRepository productsRepository) : IProductS
         : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Deleted !", conn);
     }
 
+    public async Task<ApiResponse<decimal>> GetAmountOfProducts()
+    {
+        var conn = await repository.GetAmountOfProducts();
+        return new ApiResponse<decimal>(HttpStatusCode.OK, "Amount proucts", conn);
+    }
+
+    public async Task<ApiResponse<bool>> GetAmountOfPtoductsByCategory(string name)
+    {
+        var conn = await repository.GetAmountOfPtoductsByCategory(name);
+        return conn == true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Amount product by category", conn)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Amount not found");
+    }
+
+    public async Task<ApiResponse<bool>> GetAveragePriceOfProductbyCategory(string name)
+    {
+        var res = await repository.GetAveragePriceOfProductbyCategory(name);
+        return res == true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Average price product by category", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not found");
+    }
+
+    public async Task<ApiResponse<bool>> GetMaxPriceOfProductByCategory(string name)
+    {
+        var res = await repository.GetMaxPriceOfProductByCategory(name);
+        return res == true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Max price product by category", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not found");
+    }
+
+    public async Task<ApiResponse<bool>> GetMinPriceOfProductByCategory(string name)
+    {
+        var res = await repository.GetMinPriceOfProductByCategory(name);
+        return res == true
+        ? new ApiResponse<bool>(HttpStatusCode.OK, "Min price product by category", res)
+        : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not found");
+    }
+
+
     public async Task<ApiResponse<ProductResponseDto>> GetProductAsync(int id)
     {
         var product = await repository.GetProductAsync(id);
@@ -72,6 +111,13 @@ public class ProductsService(IProductsRepository productsRepository) : IProductS
         }).ToList();
         return new ApiResponse<List<ProductResponseDto>>(HttpStatusCode.OK, "List of Product. ", product);
     }
+
+    public async Task<ApiResponse<decimal>> GetTotalPriceOfProducts()
+    {
+        var res = await repository.GetTotalPriceOfProducts();
+        return new ApiResponse<decimal>(HttpStatusCode.OK, "total price product", res);
+    }
+
 
     public async Task<ApiResponse<bool>> UpdateProductAsync(int id, ProductUpdateDto product)
     {

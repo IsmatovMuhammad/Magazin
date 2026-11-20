@@ -10,4 +10,10 @@ public interface IProductsRepository
     Task<Product> GetProductAsync(int id);
     Task<List<Product>> GetProducts();
     Task<List<Product>> GetProductByCategory(string name);
+    Task<decimal> GetAmountOfProducts();
+    Task<bool> GetAmountOfPtoductsByCategory(string name);
+    Task<bool> GetMinPriceOfProductByCategory(string name);
+    Task<bool> GetMaxPriceOfProductByCategory(string name);
+    Task<bool> GetAveragePriceOfProductbyCategory(string name);
+    Task<decimal> GetTotalPriceOfProducts();
 }

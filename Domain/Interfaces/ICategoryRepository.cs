@@ -7,4 +7,5 @@ public interface ICategoryRepository
     Task<bool> UpdateCategory(Category category);
     Task<Category> GetCategory(int id);
     Task<List<Category>> GetCategories();
+    Task<int> GetAmountOfCategories();
 }

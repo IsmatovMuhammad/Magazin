@@ -33,6 +33,13 @@ public class CategoryService(ICategoryRepository categoryRepository) : ICategory
         : new ApiResponse<bool>(HttpStatusCode.InternalServerError, "Not Deleted !", false);
     }
 
+    public async Task<ApiResponse<int>> GetAmountOfCategories()
+    {
+        var conn = await repository.GetAmountOfCategories();
+        return new ApiResponse<int>(HttpStatusCode.OK, "Amount category", conn);
+    }
+
+
     public async Task<ApiResponse<List<CategoryResponseDto>>> GetCategories()
     {
         var cate = await repository.GetCategories();

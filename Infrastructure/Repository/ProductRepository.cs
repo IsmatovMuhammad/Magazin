@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using Dapper;
@@ -32,6 +33,42 @@ public class ProductRepository(DataBase dataBase) : IProductsRepository
         return res > 0;
     }
 
+    public async Task<decimal> GetAmountOfProducts()
+    {
+        return await data.Products.SumAsync(x => x.Price);
+        
+    }
+
+    public async Task<bool> GetAmountOfPtoductsByCategory(string name)
+    {
+        var res = await data.Products.Where(x => x.Category.Name == name)
+        .SumAsync(x => x.Price);
+        return res > 0;
+
+    }
+
+    public async Task<bool> GetAveragePriceOfProductbyCategory(string name)
+    {
+        var res = await data.Products.Where(x => x.Category.Name == name)
+        .AverageAsync(x => x.Price);
+        return res > 0;
+    }
+
+    public async Task<bool> GetMaxPriceOfProductByCategory(string name)
+    {
+        var res = await data.Products.Where(x => x.Category.Name == name)
+        .MaxAsync(x => x.Price);
+        return res > 0;
+    }
+
+    public async Task<bool> GetMinPriceOfProductByCategory(string name)
+    {
+        var res = await data.Products.Where(x => x.Category.Name == name)
+        .MinAsync(x => x.Price);
+        return res > 0;
+    }
+
+
     public async Task<Product> GetProductAsync(int id)
     {
         var res = await data.Products.FirstOrDefaultAsync(x => x.Id == id);
@@ -47,6 +84,12 @@ public class ProductRepository(DataBase dataBase) : IProductsRepository
     {
         return await data.Products.ToListAsync();
     }
+
+    public async Task<decimal> GetTotalPriceOfProducts()
+    {
+        return await data.Products.SumAsync(x => x.Price);
+    }
+
 
     public async Task<bool> UpdateProductAsync(Product product)
     {
